@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Static Template</title>
+	<style>
+	    body {
+	        font-size: 20px;
+	        width: 600px;
+	        margin: auto;
+	    }
+	    canvas, video {
+	        display:none
+	    }
+
+	    p {
+	        white-space: pre;
+	        padding:0.5em;
+	        margin: 0;
+	    }
+
+	    p.actual {
+	        background: yellow;
+	    }
+    </style>
+</head>
+
+<body>
+	<video width="160" height="120">
+		<track default srclang="hu" src="/fulltext.vtt" kind="descriptions">
+	</video>
+	<canvas width="160" height="120"></canvas>
+	<button disabled>start</button>
+	<div id="text"></div>
+    <script src="reader.js"></script>
+</body>
+
+</html>
