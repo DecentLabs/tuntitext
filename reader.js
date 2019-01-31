@@ -11,37 +11,40 @@ const getId = cue => `cue-${cue.startTime}-${cue.endTime}`
 
 const text = []
 
-track.addEventListener('load', e => {
-  const track = e.target.track
+const tracksLoaded = new Promise(resolve => {
+  track.addEventListener('load', e => {
+    const track = e.target.track
 
-  track.oncuechange = function () {
-    let cue = this.activeCues[0]
-    if (cue) {
-      let actual = null
-      const currentId = getId(cue)
-      text.forEach(p => {
-        p.classList.remove('actual')
-        if (p.id === currentId) {
-          p.classList.add('actual')
-          actual = p
+    track.oncuechange = function () {
+      let cue = this.activeCues[0]
+      if (cue) {
+        let actual = null
+        const currentId = getId(cue)
+        text.forEach(p => {
+          p.classList.remove('actual')
+          if (p.id === currentId) {
+            p.classList.add('actual')
+            actual = p
+          }
+        })
+
+        if (actual) {
+          actual.scrollIntoViewIfNeeded(true)
         }
-      })
-
-      if (actual) {
-        actual.scrollIntoView(false)
       }
     }
-  }
 
-  for (let cue of track.cues) {
-    const p = document.createElement('p')
-    p.innerHTML = cue.text
-    p.id = getId(cue)
-    text.push(p)
-    textWrapper.appendChild(p)
-  }
+    for (let cue of track.cues) {
+      const p = document.createElement('p')
+      p.innerHTML = cue.text
+      p.id = getId(cue)
+      text.push(p)
+    }
 
-  start.removeAttribute('disabled')
+    start.removeAttribute('disabled')
+
+    resolve(track)
+  })
 })
 
 start.addEventListener('click', e => {
@@ -49,6 +52,12 @@ start.addEventListener('click', e => {
     playing = true
     video.srcObject = canvas.captureStream(24)
     video.play()
+    tracksLoaded.then(track => {
+      text.forEach(p => {
+        textWrapper.appendChild(p)
+      })
+    })
+    start.remove()
   }
 })
 
