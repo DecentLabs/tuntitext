@@ -47,17 +47,19 @@ const tracksLoaded = new Promise(resolve => {
   })
 })
 
+tracksLoaded.then(track => {
+  text.forEach(p => {
+    textWrapper.appendChild(p)
+  })
+})
+
+
 start.addEventListener('click', e => {
   if (!playing) {
     playing = true
     video.srcObject = canvas.captureStream(24)
     video.play()
-    tracksLoaded.then(track => {
-      text.forEach(p => {
-        textWrapper.appendChild(p)
-      })
-    })
-    start.remove()
+    document.body.classList.remove('start')
   }
 })
 
