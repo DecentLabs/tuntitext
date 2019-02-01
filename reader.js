@@ -8,7 +8,7 @@ const getId = cue => `cue-${cue.startTime}-${cue.endTime}`
 
 const text = []
 
-const trackLoaded = (trackElement.track.cues) ? Promise.resolve(trackElement.track) : new Promise(resolve => {
+const trackLoaded = (trackElement.track.cues && trackElement.track.cues.length) ? Promise.resolve(trackElement.track) : new Promise(resolve => {
   trackElement.addEventListener('load', () => {
     resolve(trackElement.track)
   })
