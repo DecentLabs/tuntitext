@@ -11,8 +11,8 @@ export default class Vtt {
       console.log(cue.startTime, cue.endTime)
     }
     this.state = STATE.STOP
-    this.activeCue = null
-    this.activeIndex = 0
+    this.activeCue = undefined
+    this.activeIndex = -1
     this.startTimestamp = 0
   }
 
