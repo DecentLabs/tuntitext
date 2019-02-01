@@ -14,31 +14,26 @@ export default class Vtt {
     this.activeCue = null
     this.activeIndex = 0
     this.startTimestamp = 0
-    this.lastTime = this.cues[this.cues.length-1].endTime
   }
 
-  getActiveCue (dtSec) {
-    let currentCue = this.cues[this.activeIndex]
-    for (let i = this.activeIndex; (currentCue.startTime <= dtSec)  && i < this.cues.length; i++) {
-      currentCue = this.cues[i]
-//      console.log(currentCue.startTime, dtSec, currentCue.endTime)
-      if (currentCue.startTime <= dtSec && currentCue.endTime >= dtSec) {
-        this.activeIndex = i;
-        return currentCue
-      }
+  getActiveCueIndex (dtSec, start) {
+    let nextCue = this.cues[start + 1]
+    if (nextCue && nextCue.startTime <= dtSec) {
+      return start + 1
     }
+    return start
   }
 
   playFrame () {
     const now = Date.now()
-    const dt = (now - this.startTimestamp)/1000
-//    console.log('indexes: ',this.activeIndex, this.cues.length, dt , this.lastTime)
-    if (this.activeIndex < this.cues.length && dt <= this.lastTime) {
-      const newActiveCue = this.getActiveCue(dt)
+    const dt = (now - this.startTimestamp) / 1000
+    if (this.activeIndex < this.cues.length-1) {
+      this.activeIndex = this.getActiveCueIndex(dt, this.activeIndex)
+      const newActiveCue = this.cues[this.activeIndex]
       if (newActiveCue !== this.activeCue) {
-        console.log('newCue', newActiveCue) // emitEventWithNewActiveCue
+        console.log('newCue', newActiveCue)
         this.activeCue = newActiveCue
-        if(this.oncuechange) {
+        if (this.oncuechange) {
           this.oncuechange(this.activeCue)
         }
       }
